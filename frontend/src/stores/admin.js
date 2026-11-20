@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { products } from "@/data/products";
 import { categories } from "@/data/categories";
@@ -11,8 +11,8 @@ import { slugify } from "@/lib/format";
 const plainCategories = categories.map(({ icon, ...rest }) => ({ ...rest, products: 0 }));
 
 const defaultSettings = {
-  storeName: "OORA",
-  supportEmail: "hello@oora.in",
+  storeName: "MORO",
+  supportEmail: "hello@moro.in",
   freeShipping: 499,
   flatShipping: 59,
   lowStock: 15,
@@ -111,7 +111,7 @@ export const useAdminStore = create(
         set({ settings: { ...get().settings, ...patch } });
       },
     }),
-    { name: "oora-admin" }
+    { name: "moro-admin" }
   )
 );
 

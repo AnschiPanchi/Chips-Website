@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth";
 
 export const Route = createFileRoute("/_site/account/profile")({
-  head: () => ({ meta: [{ title: "Profile — OORA" }] }),
+  head: () => ({ meta: [{ title: "Profile — MORO" }] }),
   component: ProfilePage,
 });
 

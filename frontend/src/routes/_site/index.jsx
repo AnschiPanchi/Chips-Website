@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import Hero from "@/components/home/Hero";
 import UspStrip from "@/components/home/UspStrip";
 import Bestsellers from "@/components/home/Bestsellers";
@@ -13,7 +13,7 @@ import Newsletter from "@/components/home/Newsletter";
 export const Route = createFileRoute("/_site/")({
   head: () => ({
     meta: [
-      { title: "OORA — Big Flavour. Zero Palm Oil." },
+      { title: "MORO — Big Flavour. Zero Palm Oil." },
       {
         name: "description",
         content:

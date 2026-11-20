@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Accordion,
   AccordionContent,
@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/accordion";
 
 export const Route = createFileRoute("/_site/faq")({
-  head: () => ({ meta: [{ title: "FAQ — OORA" }] }),
+  head: () => ({ meta: [{ title: "FAQ — MORO" }] }),
   component: FaqPage,
 });
 

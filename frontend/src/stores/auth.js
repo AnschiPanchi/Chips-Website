@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { demoAddress } from "@/data/customers";
 
@@ -52,7 +52,7 @@ export const useAuthStore = create(
         set({ user: { ...user, addresses: (user.addresses || []).filter((a) => a.id !== id) } });
       },
     }),
-    { name: "oora-auth" }
+    { name: "moro-auth" }
   )
 );
 

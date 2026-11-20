@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { brand } from "@/lib/brand";
 
 export const Route = createFileRoute("/_site/contact")({
-  head: () => ({ meta: [{ title: "Contact us — OORA" }] }),
+  head: () => ({ meta: [{ title: "Contact us — MORO" }] }),
   component: ContactPage,
 });
 

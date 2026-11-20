@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShoppingBag } from "lucide-react";
 import CartItem from "@/components/cart/CartItem";
 import CartSummary from "@/components/cart/CartSummary";
@@ -7,7 +7,7 @@ import { brand } from "@/lib/brand";
 import { inr } from "@/lib/format";
 
 export const Route = createFileRoute("/_site/cart")({
-  head: () => ({ meta: [{ title: "Your bag — OORA" }] }),
+  head: () => ({ meta: [{ title: "Your bag — MORO" }] }),
   component: CartPage,
 });
 

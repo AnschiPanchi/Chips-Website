@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import ProductBrowser from "@/components/product/ProductBrowser";
 import { categoryService } from "@/services/categoryService";
@@ -7,7 +7,7 @@ import { productService } from "@/services/productService";
 export const Route = createFileRoute("/_site/collections/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params?.slug?.replace(/-/g, " ") || "Collection"} — OORA` },
+      { title: `${params?.slug?.replace(/-/g, " ") || "Collection"} — MORO` },
       { name: "description", content: "Palm-oil free snacks made with cold-pressed oils." },
     ],
   }),

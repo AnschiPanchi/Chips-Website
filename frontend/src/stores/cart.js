@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { coupons } from "@/data/coupons";
 import { inr } from "@/lib/format";
@@ -81,7 +81,7 @@ export const useCartStore = create(
       },
     }),
     {
-      name: "oora-cart",
+      name: "moro-cart",
       partialize: (state) => ({ items: state.items, coupon: state.coupon }),
     }
   )

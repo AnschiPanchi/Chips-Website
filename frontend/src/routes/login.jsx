@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +8,7 @@ import AuthShell from "@/components/auth/AuthShell";
 import { useAuthStore } from "@/stores/auth";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Sign in — OORA" }] }),
+  head: () => ({ meta: [{ title: "Sign in — MORO" }] }),
   component: LoginPage,
 });
 
@@ -111,7 +111,7 @@ function LoginPage() {
           type="button"
           onClick={() => {
             setValue("email", "aanya.kapoor@example.com", { shouldValidate: true });
-            setValue("password", "ooracrunch", { shouldValidate: true });
+            setValue("password", "MOROcrunch", { shouldValidate: true });
           }}
           className="w-full rounded-md border border-brand-forest/20 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-forest/70 transition-colors hover:border-brand-forest hover:text-brand-forest"
         >

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +8,7 @@ import AuthShell from "@/components/auth/AuthShell";
 import { useAuthStore } from "@/stores/auth";
 
 export const Route = createFileRoute("/register")({
-  head: () => ({ meta: [{ title: "Create an account — OORA" }] }),
+  head: () => ({ meta: [{ title: "Create an account — MORO" }] }),
   component: RegisterPage,
 });
 

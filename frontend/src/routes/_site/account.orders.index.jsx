@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import StatusBadge from "@/components/account/StatusBadge";
 import { inr, shortDate } from "@/lib/format";
@@ -7,7 +7,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useAdminStore } from "@/stores/admin";
 
 export const Route = createFileRoute("/_site/account/orders/")({
-  head: () => ({ meta: [{ title: "My orders — OORA" }] }),
+  head: () => ({ meta: [{ title: "My orders — MORO" }] }),
   component: OrdersPage,
 });
 

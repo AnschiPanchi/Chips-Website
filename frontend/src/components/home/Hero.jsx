@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+﻿import { Link } from "@tanstack/react-router";
 import { Image } from "@/components/ui/image";
 import { media } from "@/data/media";
 import { products } from "@/data/products";
@@ -8,7 +8,7 @@ const pack = products[0];
 
 export default function Hero() {
   return (
-    <section className="hs13-section hs13-anim" aria-label="OORA — Big Flavour. Zero Palm Oil.">
+    <section className="hs13-section hs13-anim" aria-label="MORO — Big Flavour. Zero Palm Oil.">
       <div className="hs13-inner">
         <div className="hs13-text">
           <p className="hs13-eyebrow">Baked · Popped · Never palm-oil fried</p>

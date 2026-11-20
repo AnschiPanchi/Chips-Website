@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export const useWishlistStore = create(
@@ -17,7 +17,7 @@ export const useWishlistStore = create(
         set({ ids: [] });
       },
     }),
-    { name: "oora-wishlist" }
+    { name: "moro-wishlist" }
   )
 );
 

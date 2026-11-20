@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShoppingBag } from "lucide-react";
 import CheckoutForm from "@/components/checkout/CheckoutForm";
 import OrderSummary from "@/components/checkout/OrderSummary";
@@ -6,7 +6,7 @@ import CouponInput from "@/components/cart/CouponInput";
 import { useCartStore } from "@/stores/cart";
 
 export const Route = createFileRoute("/_site/checkout")({
-  head: () => ({ meta: [{ title: "Checkout — OORA" }] }),
+  head: () => ({ meta: [{ title: "Checkout — MORO" }] }),
   component: CheckoutPage,
 });
 

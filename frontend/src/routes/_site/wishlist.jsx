@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import ProductGrid from "@/components/product/ProductGrid";
 import { productService } from "@/services/productService";
@@ -6,7 +6,7 @@ import { useWishlistStore } from "@/stores/wishlist";
 import { useMounted } from "@/hooks/useMounted";
 
 export const Route = createFileRoute("/_site/wishlist")({
-  head: () => ({ meta: [{ title: "Wishlist — OORA" }] }),
+  head: () => ({ meta: [{ title: "Wishlist — MORO" }] }),
   component: WishlistPage,
 });
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ChevronRight, Heart, Minus, Plus, ShieldCheck, Truck } from "lucide-react";
 import { toast } from "sonner";
@@ -23,7 +23,7 @@ import { reviews } from "@/data/reviews";
 export const Route = createFileRoute("/_site/products/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params?.slug?.replace(/-/g, " ") || "Snack"} — OORA` },
+      { title: `${params?.slug?.replace(/-/g, " ") || "Snack"} — MORO` },
       { name: "description", content: "Baked and air-popped snacks with zero palm oil." },
     ],
   }),

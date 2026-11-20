@@ -4,14 +4,14 @@ export const base44 = {
   auth: {
     hasToken: () => {
       try {
-        return !!localStorage.getItem("oora_auth_token");
+        return !!localStorage.getItem("moro_auth_token");
       } catch {
         return false;
       }
     },
     me: async () => {
       try {
-        const stored = localStorage.getItem("oora_user");
+        const stored = localStorage.getItem("moro_user");
         return stored ? JSON.parse(stored) : null;
       } catch {
         return null;
@@ -20,16 +20,16 @@ export const base44 = {
     login: async (credentials) => {
       const mockUser = {
         id: "usr_1",
-        email: credentials?.email || "customer@oora.com",
+        email: credentials?.email || "customer@moro.in",
         name: "Valued Customer",
       };
-      localStorage.setItem("oora_auth_token", "demo_token");
-      localStorage.setItem("oora_user", JSON.stringify(mockUser));
+      localStorage.setItem("moro_auth_token", "demo_token");
+      localStorage.setItem("moro_user", JSON.stringify(mockUser));
       return mockUser;
     },
     logout: async () => {
-      localStorage.removeItem("oora_auth_token");
-      localStorage.removeItem("oora_user");
+      localStorage.removeItem("moro_auth_token");
+      localStorage.removeItem("moro_user");
     },
     register: async (data) => {
       const mockUser = {
@@ -37,8 +37,8 @@ export const base44 = {
         email: data?.email,
         name: data?.name || "Customer",
       };
-      localStorage.setItem("oora_auth_token", "demo_token");
-      localStorage.setItem("oora_user", JSON.stringify(mockUser));
+      localStorage.setItem("moro_auth_token", "demo_token");
+      localStorage.setItem("moro_user", JSON.stringify(mockUser));
       return mockUser;
     },
     resetPassword: async () => true,

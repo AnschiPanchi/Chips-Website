@@ -1,9 +1,9 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+﻿import { createFileRoute, Outlet } from "@tanstack/react-router";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import { useMounted } from "@/hooks/useMounted";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Admin console — OORA" }] }),
+  head: () => ({ meta: [{ title: "Admin console — MORO" }] }),
   component: AdminLayout,
 });
 

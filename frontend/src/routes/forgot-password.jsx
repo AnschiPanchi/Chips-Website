@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +7,7 @@ import { ArrowLeft, Loader2, MailCheck } from "lucide-react";
 import AuthShell from "@/components/auth/AuthShell";
 
 export const Route = createFileRoute("/forgot-password")({
-  head: () => ({ meta: [{ title: "Reset your password — OORA" }] }),
+  head: () => ({ meta: [{ title: "Reset your password — MORO" }] }),
   component: ForgotPasswordPage,
 });
 

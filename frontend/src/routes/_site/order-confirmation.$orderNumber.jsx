@@ -1,10 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, Package } from "lucide-react";
 import { inr, shortDate } from "@/lib/format";
 import { useAdminStore } from "@/stores/admin";
 
 export const Route = createFileRoute("/_site/order-confirmation/$orderNumber")({
-  head: () => ({ meta: [{ title: "Order placed — OORA" }] }),
+  head: () => ({ meta: [{ title: "Order placed — MORO" }] }),
   component: ConfirmationPage,
 });
 

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import { media } from "@/data/media";
@@ -7,11 +7,11 @@ import { brand } from "@/lib/brand";
 export const Route = createFileRoute("/_site/about")({
   head: () => ({
     meta: [
-      { title: "Our story — OORA" },
+      { title: "Our story — MORO" },
       {
         name: "description",
         content:
-          "Why OORA exists: baked, popped and roasted snacks with zero palm oil, made with cold-pressed oils and familiar Indian masalas.",
+          "Why MORO exists: baked, popped and roasted snacks with zero palm oil, made with cold-pressed oils and familiar Indian masalas.",
       },
     ],
   }),

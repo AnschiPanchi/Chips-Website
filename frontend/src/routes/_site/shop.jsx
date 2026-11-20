@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import ProductBrowser from "@/components/product/ProductBrowser";
 import { productService } from "@/services/productService";
 
@@ -6,10 +6,10 @@ export const Route = createFileRoute("/_site/shop")({
   validateSearch: (search) => ({ q: search.q || undefined }),
   head: () => ({
     meta: [
-      { title: "Shop all snacks — OORA" },
+      { title: "Shop all snacks — MORO" },
       {
         name: "description",
-        content: "The full OORA range: baked chips, air-popped crisps, millet snacks and namkeen.",
+        content: "The full MORO range: baked chips, air-popped crisps, millet snacks and namkeen.",
       },
     ],
   }),
