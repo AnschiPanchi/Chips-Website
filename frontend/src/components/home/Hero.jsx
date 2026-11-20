@@ -46,7 +46,7 @@ export default function Hero() {
         <div className="hs13-media">
           <div className="hs13-strips" aria-hidden="true">
             <div className="hs13-strips__track">
-              {[0, 1, 2, 3].map((i) => (
+              {[0, 1, 2, 3, 4, 5].map((i) => (
                 <Image key={i} src={media.hero} alt="" />
               ))}
             </div>
@@ -61,7 +61,11 @@ export default function Hero() {
           </div>
           <Link to="/products/$slug" params={{ slug: pack.slug }} className="hs13-portrait">
             <Image src={pack.image} alt={pack.name} />
-            <span className="hs13-portrait__tag">Bestseller · {pack.flavour}</span>
+            <span className="hs13-portrait__tag">
+              <span>Bestseller</span>
+              <span>·</span>
+              <span>{pack.flavour}</span>
+            </span>
           </Link>
         </div>
       </div>

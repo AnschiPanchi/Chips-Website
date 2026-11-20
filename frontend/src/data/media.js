@@ -1,4 +1,4 @@
-const base = "https://media.base44.com/images/public/6b00a711a7b414075f091615/";
+const base = "/images/";
 
 export const media = {
   hero: `${base}e4c0e8952_generated_42b9e9e8.png`,

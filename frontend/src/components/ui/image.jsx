@@ -70,40 +70,16 @@ const Image = React.forwardRef(
       return <img ref={ref} src={FALLBACK_IMAGE_URL} {...imageProps} data-empty-image />
     }
 
-    // A failed transform retries the underlying original as a plain image.
-    // Only a failure of that original advances to the generic fallback.
-    const parsed = mode === IMAGE_LOAD_MODE.OPTIMIZED ? parsedSource : null
-
-    if (!parsed) {
-      const isErrorMode = mode === IMAGE_LOAD_MODE.FALLBACK
-      const imageSrc = isErrorMode ? FALLBACK_IMAGE_URL : getOriginalImageUrl(src, parsedSource)
+    if (src) {
       return (
-        <img ref={ref} src={imageSrc} {...imageProps} data-error-image={isErrorMode || undefined} />
-      )
+        <img
+          ref={ref}
+          src={src}
+          {...imageProps}
+          loading={imageProps.loading || "lazy"}
+        />
+      );
     }
-
-    const focalPoint =
-      typeof focalPointX === "number" && typeof focalPointY === "number"
-        ? { x: focalPointX, y: focalPointY }
-        : undefined
-    // Origin dimensions are optional — when known they stabilize layout via
-    // the wrapper's aspect-ratio before the image loads.
-    const aspectRatio =
-      originWidth && originHeight ? `${originWidth} / ${originHeight}` : undefined
-
-    return (
-      <ResponsiveImage
-        ref={ref}
-        src={src}
-        parsed={parsed}
-        onSourceChange={replaceSource}
-        fittingType={fittingType}
-        focalPoint={focalPoint}
-        quality={quality}
-        aspectRatio={aspectRatio}
-        {...imageProps}
-      />
-    )
   }
 )
 Image.displayName = "Image"

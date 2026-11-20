@@ -1,13 +1,17 @@
-/* Editorial hero, adapted from the Figma "Hero Section 13" layout:
-   white text column on the left, media panel covering the right half on wide
-   screens, portrait product card floating bottom-right, drifting backdrop.
-   Restyled to OORA's forest / cream / chilli palette and Manrope type. */
+/* Editorial hero — OORA brand: forest / cream / chilli palette */
 
+/* ===== RESET ===== */
+.hs13-section *,
+.hs13-section *::before,
+.hs13-section *::after {
+  box-sizing: border-box;
+}
+
+/* ===== BASE ===== */
 .hs13-section {
   --hs13-ink: #173F32;
-  --hs13-body: rgba(23, 63, 50, 0.78);
+  --hs13-body-color: rgba(23, 63, 50, 0.78);
   --hs13-btn: #173F32;
-  --hs13-btn-text: #FAF6EC;
 
   position: relative;
   width: 100%;
@@ -19,40 +23,28 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.hs13-section *,
-.hs13-section *::before,
-.hs13-section *::after {
-  box-sizing: border-box;
-}
-
-/* Aligns with the page's content container and queries its own width. */
+/* ===== WRAPPER — mobile: single column ===== */
 .hs13-inner {
   position: relative;
-  display: grid;
-  grid-template-areas:
-    "text"
-    "media";
   width: 100%;
-  max-width: 1360px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;
-  container: hs13-root / inline-size;
 }
 
 @media (min-width: 640px) {
   .hs13-inner { padding: 0 32px; }
 }
-@media (min-width: 1024px) {
-  .hs13-inner { padding: 0 48px; }
-}
 
+/* ===== TEXT COLUMN ===== */
 .hs13-text {
-  grid-area: text;
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: clamp(16px, 3cqi, 26px);
-  padding: clamp(36px, 6cqi, 56px) 0 clamp(28px, 5cqi, 48px);
-  z-index: 2;
+  gap: clamp(14px, 2.5vw, 24px);
+  padding: clamp(40px, 7vw, 72px) 0 clamp(32px, 5vw, 56px);
+  max-width: 540px;
 }
 
 .hs13-eyebrow {
@@ -79,8 +71,8 @@
   font-family: 'Manrope', system-ui, sans-serif;
   font-weight: 800;
   color: var(--hs13-ink);
-  font-size: clamp(2.5rem, 1.2rem + 6cqi, 3.875rem);
-  line-height: 0.98;
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  line-height: 1.02;
   letter-spacing: -0.03em;
 }
 
@@ -91,11 +83,11 @@
 
 .hs13-body {
   margin: 0;
-  max-width: 42ch;
+  max-width: 46ch;
   font-size: 17px;
   line-height: 1.65;
   letter-spacing: -0.01em;
-  color: var(--hs13-body);
+  color: var(--hs13-body-color);
 }
 
 .hs13-actions {
@@ -114,8 +106,8 @@
   background: var(--hs13-btn);
   color: #FAF6EC;
   border: 0;
-  border-radius: 4.75px;
-  padding: 17px 22px;
+  border-radius: 6px;
+  padding: 17px 24px;
   font-family: 'Manrope', system-ui, sans-serif;
   font-weight: 600;
   font-size: 11px;
@@ -130,7 +122,6 @@
   width: 14px;
   height: 9px;
   flex: none;
-  color: inherit;
 }
 
 .hs13-cta:hover,
@@ -166,7 +157,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px 20px;
-  margin-top: clamp(8px, 2cqi, 18px);
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -187,15 +177,17 @@
   background: #8A945B;
 }
 
+/* ===== MEDIA PANEL — mobile: stacked below text ===== */
 .hs13-media {
-  grid-area: media;
   position: relative;
   overflow: hidden;
-  min-height: clamp(300px, 64cqi, 460px);
-  border-radius: 18px;
+  height: clamp(320px, 60vw, 440px);
+  border-radius: 20px;
+  margin-bottom: 48px;
   background: #173F32;
 }
 
+/* drifting image strip */
 .hs13-strips {
   position: absolute;
   inset: 0;
@@ -211,7 +203,7 @@
   display: flex;
   height: 100%;
   will-change: transform;
-  animation: hs13-drift 42s linear infinite;
+  animation: hs13-drift 48s linear infinite;
 }
 
 .hs13-strips__track img {
@@ -226,28 +218,32 @@
 }
 
 @keyframes hs13-drift {
-  from { transform: translate3d(-25%, 0, 0); }
+  from { transform: translate3d(-16.666%, 0, 0); }
   to   { transform: translate3d(0, 0, 0); }
 }
 
+/* dark overlay */
 .hs13-scrim {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(200deg, rgba(23, 63, 50, 0.15) 0%, rgba(23, 63, 50, 0.45) 100%);
+  background: linear-gradient(200deg, rgba(23, 63, 50, 0.1) 0%, rgba(23, 63, 50, 0.4) 100%);
 }
 
+/* floating product card */
 .hs13-portrait {
   position: absolute;
   z-index: 2;
-  right: clamp(16px, 4cqi, 34px);
-  bottom: clamp(16px, 4cqi, 34px);
-  width: clamp(132px, 26cqi, 208px);
+  right: clamp(16px, 4vw, 32px);
+  bottom: clamp(16px, 4vw, 32px);
+  width: clamp(160px, 30vw, 200px);
   aspect-ratio: 4 / 5;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   background: #FAF6EC;
-  box-shadow: 0 18px 40px rgba(15, 35, 28, .35);
+  box-shadow: 0 16px 36px rgba(15, 35, 28, .35);
+  display: block;
+  text-decoration: none;
 }
 
 .hs13-portrait img {
@@ -262,23 +258,29 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 14px 12px 9px;
+  padding: 18px 10px 10px;
   font-family: 'Manrope', system-ui, sans-serif;
-  font-size: 9px;
+  font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #FFFDF8;
-  background: linear-gradient(to top, rgba(23, 63, 50, 0.9), transparent);
+  background: linear-gradient(to top, rgba(23, 63, 50, 0.95) 0%, rgba(23, 63, 50, 0.6) 60%, transparent 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
 }
 
+/* "0% palm oil" badge */
 .hs13-ring {
   position: absolute;
   z-index: 2;
-  top: clamp(16px, 4cqi, 30px);
-  left: clamp(16px, 4cqi, 30px);
-  width: clamp(74px, 13cqi, 104px);
-  height: clamp(74px, 13cqi, 104px);
+  top: clamp(14px, 3vw, 28px);
+  left: clamp(14px, 3vw, 28px);
+  width: clamp(72px, 11vw, 96px);
+  height: clamp(72px, 11vw, 96px);
   border-radius: 999px;
   border: 1px solid rgba(255, 253, 248, 0.55);
   display: grid;
@@ -292,59 +294,74 @@
   text-transform: uppercase;
   color: #FFFDF8;
   background: rgba(23, 63, 50, 0.35);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(3px);
 }
 
-/* ===== WIDE: layered editorial layout ===== */
-@container hs13-root (width >= 820px) {
+/* ===== DESKTOP ≥ 900px: side-by-side split layout ===== */
+@media (min-width: 900px) {
+
+  /* Section is the positioning root; min-height sets its height */
+  .hs13-section {
+    min-height: clamp(560px, 44vw, 700px);
+  }
+
+  /* Inner wrapper: positions the text; stretches full section height */
   .hs13-inner {
-    grid-template-areas: "stage";
-    min-height: min(56.25cqi, 660px);
+    display: flex;
+    align-items: stretch;
+    min-height: inherit;
+    padding: 0 48px;
   }
 
-  .hs13-media {
-    grid-area: stage;
-    min-height: 0;
-    margin-left: 50cqi;
-    border-radius: 0;
-    border-top-left-radius: 24px;
-    border-bottom-left-radius: 24px;
-  }
-
+  /* Text column: left 50%, vertically centered */
   .hs13-text {
-    grid-area: stage;
-    position: relative;
+    width: 50%;
+    max-width: none;
     justify-content: center;
-    padding: clamp(32px, 3.6cqi, 56px) 0;
-    width: 100%;
-    pointer-events: none;
+    padding: 64px 56px 64px 0;
   }
 
   .hs13-title {
-    max-width: min(calc(46.6cqi - 24px), 620px);
-    font-size: clamp(2.75rem, 9px + 5cqi, 4rem);
+    font-size: clamp(2.75rem, 2vw + 2rem, 4rem);
   }
 
   .hs13-body {
-    max-width: min(360px, calc(46.6cqi - 24px));
+    max-width: 44ch;
   }
 
-  .hs13-eyebrow,
-  .hs13-title,
-  .hs13-body,
-  .hs13-actions,
-  .hs13-trust {
-    pointer-events: auto;
+  /* Media: absolutely covers the right half of the SECTION (not inner) */
+  .hs13-media {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    /* left edge = 50% of the section's width */
+    left: 50%;
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+    border-top-left-radius: 28px;
+    border-bottom-left-radius: 28px;
+    z-index: 0;
+  }
+
+  .hs13-portrait {
+    width: clamp(200px, 15vw, 248px);
+    right: clamp(24px, 3vw, 48px);
+    bottom: clamp(24px, 3vw, 44px);
+  }
+
+  .hs13-ring {
+    top: clamp(24px, 3vw, 36px);
+    left: clamp(24px, 3vw, 36px);
+    width: clamp(80px, 7vw, 100px);
+    height: clamp(80px, 7vw, 100px);
   }
 }
 
-@container hs13-root (width >= 1100px) {
-  .hs13-title { font-size: clamp(3.25rem, 1rem + 4.4cqi, 4rem); }
-}
-
-/* ===== entrance ===== */
+/* ===== ENTRANCE ANIMATIONS ===== */
 @keyframes hs13-rise {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
