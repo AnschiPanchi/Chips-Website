@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 43 100% 98.6%;
+    --foreground: 160 46% 17%;
+    --card: 44 58% 95.3%;
+    --card-foreground: 160 46% 17%;
+    --popover: 43 100% 98.6%;
+    --popover-foreground: 160 46% 17%;
+    --primary: 160 46% 17%;
+    --primary-foreground: 43 100% 98.6%;
+    --secondary: 44 40% 91%;
+    --secondary-foreground: 160 46% 17%;
+    --muted: 44 32% 93%;
+    --muted-foreground: 100 8% 33%;
+    --accent: 21 79% 56%;
+    --accent-foreground: 96 8% 12%;
+    --destructive: 0 68% 44%;
+    --destructive-foreground: 43 100% 98.6%;
+    --border: 45 22% 85%;
+    --input: 45 22% 84%;
+    --ring: 160 46% 25%;
+    --chart-1: 160 46% 22%;
+    --chart-2: 21 79% 56%;
+    --chart-3: 70 37% 47%;
+    --chart-4: 35 60% 62%;
+    --chart-5: 96 8% 30%;
+    --radius: 0.5rem;
+    --font-heading: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply font-heading;
+    letter-spacing: -0.025em;
+  }
+
+  ::selection {
+    background: #E87536;
+    color: #FFFDF8;
+  }
+}
+
+@layer utilities {
+  .container-x {
+    @apply mx-auto w-full max-w-[1360px] px-5 sm:px-8 lg:px-12;
+  }
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.22em];
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hairline {
+    @apply border-t border-brand-forest/12;
+  }
+  .balance {
+    text-wrap: balance;
+  }
+}
