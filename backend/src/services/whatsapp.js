@@ -1,3 +1,5 @@
+import { getClientUrl } from "./mailer.js";
+
 /**
  * WhatsApp Notification Service for MORO Snacks
  *
@@ -134,7 +136,7 @@ ${order.address?.name || order.customer}, ${order.address?.city || ""} - ${order
 We're freshly baking and packing your snacks! We'll notify you as soon as they're dispatched.
 
 Track your order anytime:
-👉 http://localhost:5173/account/orders/${order.orderNumber}
+👉 ${getClientUrl()}/account/orders/${order.orderNumber}
 
 Crunch on! 🌿 Zero palm oil. Always.`;
 }
@@ -178,7 +180,7 @@ Here is an update on your order *${order.orderNumber}*:
 📝 *Note:* ${note}
 
 Track live details:
-👉 http://localhost:5173/account/orders/${order.orderNumber}
+👉 ${getClientUrl()}/account/orders/${order.orderNumber}
 
 Questions? Reply directly to this message or write to hello@moro.in.`;
 }
@@ -195,7 +197,7 @@ ${message || "Craving something savoury, spicy, and baked with zero palm oil?"}
 💰 *Offer:* ${discountDetails || "Exclusive Discount on your order"}
 
 Shop your favourite chips, puffs and namkeen before stock runs out:
-👉 ${shopUrl || "http://localhost:5173/shop"}
+👉 ${shopUrl || `${getClientUrl()}/shop`}
 
 Hurry, offer valid for a limited time! 🏃💨`;
 }

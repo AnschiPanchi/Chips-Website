@@ -17,12 +17,88 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // ── Security & parsing ──────────────────────────────────────
-app.use(helmet());
-app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
-  credentials: true,
-}));
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
+
+const allowedOrigins = [
+  "https://moro-chips.vercel.app",
+  "https://morochipsbackend.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+  process.env.CLIENT_URL,
+]
+  .filter(Boolean)
+  .map((u) => u.replace(/\/$/, ""));
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile, curl, same-origin)
+      if (!origin) return callback(null, true);
+      const clean = origin.replace(/\/$/, "");
+      if (
+        allowedOrigins.includes(clean) ||
+        clean.endsWith(".vercel.app") ||
+        clean.includes("localhost")
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+      "X-Api-Key",
+      "X-CSRF-Token",
+    ],
+  })
+);
+
+// Explicit preflight OPTIONS handler
+app.options("*", cors());
+
+// CORS headers fallback
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (
+    origin &&
+    (origin.endsWith(".vercel.app") ||
+      origin.includes("localhost") ||
+      origin.includes("moro-chips"))
+  ) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Api-Key, X-CSRF-Token"
+    );
+  }
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
+
+// ── Database Connection Middleware (cached for serverless) ──
+app.use(async (_req, _res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 // ── Rate limiting ───────────────────────────────────────────
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 300 });
@@ -40,15 +116,21 @@ app.use("/api/admin",      adminRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 
 // ── Health ──────────────────────────────────────────────────
-app.get("/api/health", (_req, res) =>
-  res.json({ status: "ok", env: process.env.NODE_ENV, time: new Date().toISOString() })
+app.get(["/api/health", "/health", "/api"], (_req, res) =>
+  res.json({ status: "ok", name: "MORO Snacks API", env: process.env.NODE_ENV, time: new Date().toISOString() })
 );
 
 app.use(errorHandler);
 
 // ── Boot ────────────────────────────────────────────────────
-connectDB().then(() => {
-  app.listen(PORT, () =>
-    console.log(`\n✅  MORO API running → http://localhost:${PORT}/api/health\n`)
-  );
-});
+if (!process.env.VERCEL) {
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () =>
+        console.log(`\n✅  MORO API running → http://localhost:${PORT}/api/health\n`)
+      );
+    })
+    .catch((err) => console.error("Database connection failed on startup:", err.message));
+}
+
+export default app;

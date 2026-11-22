@@ -94,12 +94,13 @@ function AdminCampaigns() {
 
     setSending(true);
     try {
+      const shopUrl = typeof window !== "undefined" ? `${window.location.origin}/shop` : "http://localhost:5173/shop";
       const res = await adminApi.broadcast({
         title,
         message,
         discountCode,
         discountDetails,
-        ctaUrl: "http://localhost:5173/shop",
+        ctaUrl: shopUrl,
         channels,
       });
 
@@ -349,7 +350,9 @@ function AdminCampaigns() {
                 <p className="mt-3 text-[11.5px] text-gray-600">
                   Shop before stock runs out:
                   <br />
-                  <span className="text-blue-600 underline">http://localhost:5173/shop</span>
+                  <span className="text-blue-600 underline">
+                    {typeof window !== "undefined" ? `${window.location.origin}/shop` : "https://moro-snacks.com/shop"}
+                  </span>
                 </p>
                 <p className="mt-2 text-[10px] text-gray-400">Zero palm oil. Freshly baked.</p>
               </div>

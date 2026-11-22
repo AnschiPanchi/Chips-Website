@@ -3,6 +3,7 @@ import {
   sendOrderStatusEmail,
   sendPromoEmail,
   sendWelcomeNewsletterEmail,
+  getClientUrl,
 } from "./mailer.js";
 import {
   sendWhatsAppMessage,
@@ -49,7 +50,7 @@ export async function notifyOrderPlaced(order) {
   if (process.env.ADMIN_NOTIFICATION_PHONE) {
     try {
       const itemsText = order.items?.map((i) => `${i.name} (x${i.qty})`).join(", ") || "Snacks";
-      const adminMsg = `🚨 *NEW ORDER RECEIVED — MORO Snacks*\n\nOrder: *${order.orderNumber}*\nCustomer: ${order.customer} (${phone || "no phone"})\nTotal: ₹${order.total} (${order.paymentMethod?.toUpperCase() || "COD"})\nItems: ${itemsText}\nCity: ${order.address?.city || ""}\n\nView details in Admin:\nhttp://localhost:5173/admin/orders/${order.orderNumber}`;
+      const adminMsg = `🚨 *NEW ORDER RECEIVED — MORO Snacks*\n\nOrder: *${order.orderNumber}*\nCustomer: ${order.customer} (${phone || "no phone"})\nTotal: ₹${order.total} (${order.paymentMethod?.toUpperCase() || "COD"})\nItems: ${itemsText}\nCity: ${order.address?.city || ""}\n\nView details in Admin:\n${getClientUrl()}/admin/orders/${order.orderNumber}`;
 
       sendWhatsAppMessage({
         phone: process.env.ADMIN_NOTIFICATION_PHONE,
@@ -109,9 +110,10 @@ export async function notifyMarketingCampaign({
   message,
   discountCode,
   discountDetails,
-  ctaUrl = "http://localhost:5173/shop",
+  ctaUrl,
   channels = ["email", "whatsapp"],
 }) {
+  const targetCtaUrl = ctaUrl || `${getClientUrl()}/shop`;
   // Fetch recipient contacts
   const [customers, subscribers] = await Promise.all([
     User.find({ role: "customer" }).select("name email phone"),
@@ -165,7 +167,7 @@ export async function notifyMarketingCampaign({
         message,
         discountCode,
         discountDetails,
-        ctaUrl,
+        ctaUrl: targetCtaUrl,
         recipients: emailList.map((e) => e.email),
       });
     } catch (err) {
@@ -184,7 +186,7 @@ export async function notifyMarketingCampaign({
           discountCode,
           discountDetails,
           message,
-          shopUrl: ctaUrl,
+          shopUrl: targetCtaUrl,
         });
         const res = await sendWhatsAppMessage({
           phone: recipient.phone,

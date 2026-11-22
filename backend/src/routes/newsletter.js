@@ -1,7 +1,7 @@
 import express from "express";
 import { Subscriber } from "../db/models.js";
 import { requireAdmin } from "../middleware/auth.js";
-import { sendWelcomeNewsletterEmail } from "../services/mailer.js";
+import { sendWelcomeNewsletterEmail, getClientUrl } from "../services/mailer.js";
 import { sendWhatsAppMessage } from "../services/whatsapp.js";
 
 const router = express.Router();
@@ -36,7 +36,7 @@ Thanks for joining our inner circle. We bake fresh snacks with cold-pressed oils
 *WELCOME10* (Min. order ₹499)
 
 Shop your favourites now:
-👉 http://localhost:5173/shop
+👉 ${getClientUrl()}/shop
 
 Crunch on! 🌿`;
 

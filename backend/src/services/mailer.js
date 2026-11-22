@@ -31,6 +31,13 @@ function getTransporter() {
   return transporter;
 }
 
+export function getClientUrl() {
+  if (process.env.CLIENT_URL) return process.env.CLIENT_URL.replace(/\/$/, "");
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:5173";
+}
+
 function getFromAddress() {
   if (process.env.EMAIL_FROM && !process.env.EMAIL_FROM.includes("no-reply@moro.in")) {
     return process.env.EMAIL_FROM;
@@ -118,7 +125,7 @@ export async function sendOrderConfirmation(order) {
         </div>
 
         <div style="text-align:center;margin-top:28px">
-          <a href="http://localhost:5173/account/orders/${order.orderNumber}" style="display:inline-block;background:#173F32;color:#FAF6EC;padding:14px 28px;border-radius:8px;font-size:12px;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;text-decoration:none">Track Your Order</a>
+          <a href="${getClientUrl()}/account/orders/${order.orderNumber}" style="display:inline-block;background:#173F32;color:#FAF6EC;padding:14px 28px;border-radius:8px;font-size:12px;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;text-decoration:none">Track Your Order</a>
         </div>
 
         ${footerHtml}
@@ -182,7 +189,7 @@ export async function sendOrderStatusEmail(order, newStatus) {
         </div>
 
         <div style="text-align:center;margin-top:28px">
-          <a href="http://localhost:5173/account/orders/${order.orderNumber}" style="display:inline-block;background:#173F32;color:#FAF6EC;padding:14px 28px;border-radius:8px;font-size:12px;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;text-decoration:none">View Live Order Status</a>
+          <a href="${getClientUrl()}/account/orders/${order.orderNumber}" style="display:inline-block;background:#173F32;color:#FAF6EC;padding:14px 28px;border-radius:8px;font-size:12px;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;text-decoration:none">View Live Order Status</a>
         </div>
 
         ${footerHtml}
@@ -232,7 +239,7 @@ export async function sendPromoEmail({ subject, title, message, discountCode, di
         ` : ""}
 
         <div style="margin-top:20px">
-          <a href="${ctaUrl || "http://localhost:5173/shop"}" style="display:inline-block;background:#173F32;color:#FAF6EC;padding:15px 36px;border-radius:8px;font-size:13px;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;text-decoration:none">Claim Discount & Shop Now</a>
+          <a href="${ctaUrl || `${getClientUrl()}/shop`}" style="display:inline-block;background:#173F32;color:#FAF6EC;padding:15px 36px;border-radius:8px;font-size:13px;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;text-decoration:none">Claim Discount & Shop Now</a>
         </div>
 
         ${footerHtml}
@@ -282,7 +289,7 @@ export async function sendWelcomeNewsletterEmail(email) {
           <p style="margin:0;font-size:12px;color:#555">10% OFF orders over ₹499</p>
         </div>
 
-        <a href="http://localhost:5173/shop" style="display:inline-block;background:#173F32;color:#FAF6EC;padding:14px 32px;border-radius:8px;font-size:12px;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;text-decoration:none">Explore The Range</a>
+        <a href="${getClientUrl()}/shop" style="display:inline-block;background:#173F32;color:#FAF6EC;padding:14px 32px;border-radius:8px;font-size:12px;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;text-decoration:none">Explore The Range</a>
 
         ${footerHtml}
       </div>

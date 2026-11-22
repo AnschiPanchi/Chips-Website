@@ -28,8 +28,9 @@ function getWhatsAppUrl(phone, order, status) {
     cancelled: "❌",
     placed: "🎉",
   };
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : (import.meta.env.VITE_STORE_URL || "");
   const emoji = statusEmojis[status] || "🔔";
-  const msg = `${emoji} *Order ${order.id} Update — MORO Snacks*\n\nHi ${order.customer}!\nYour order status is now: *${status.toUpperCase()}*.\n\nItems: ${order.items?.map((i) => `${i.name} (x${i.qty})`).join(", ")}\nTotal: ₹${order.total}\n\nTrack live status:\nhttp://localhost:5173/account/orders/${order.id}\n\nThank you for choosing zero-palm-oil MORO snacks! 🌿`;
+  const msg = `${emoji} *Order ${order.id} Update — MORO Snacks*\n\nHi ${order.customer}!\nYour order status is now: *${status.toUpperCase()}*.\n\nItems: ${order.items?.map((i) => `${i.name} (x${i.qty})`).join(", ")}\nTotal: ₹${order.total}\n\nTrack live status:\n${baseUrl}/account/orders/${order.id}\n\nThank you for choosing zero-palm-oil MORO snacks! 🌿`;
 
   return `https://wa.me/${digits}?text=${encodeURIComponent(msg)}`;
 }
