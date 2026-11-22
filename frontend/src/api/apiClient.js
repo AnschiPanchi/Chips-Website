@@ -1,7 +1,27 @@
 // Frontend API client — replaces the old base44Client mock
 // All calls go to http://localhost:3001/api
 
-const BASE = import.meta.env.VITE_API_URL || "/api";
+// Clean and robust base URL resolution
+function getBaseUrl() {
+  const envUrl = (import.meta.env.VITE_API_URL || "").trim();
+  if (!envUrl || envUrl === "/api") return "/api";
+
+  // Strip all trailing slashes
+  let clean = envUrl.replace(/\/+$/, "");
+
+  // If user passed backend URL without /api, append /api
+  if (!clean.endsWith("/api")) {
+    clean = `${clean}/api`;
+  }
+  return clean;
+}
+
+const BASE = getBaseUrl();
+
+function buildUrl(path) {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${BASE}${cleanPath}`.replace(/([^:]\/)\/+/g, "$1");
+}
 
 // ── Token management ─────────────────────────────────────────
 function getTokens() {
@@ -36,12 +56,13 @@ async function request(path, options = {}, retry = true) {
     ...options.headers,
   };
 
-  const res = await fetch(`${BASE}${path}`, { ...options, headers });
+  const targetUrl = buildUrl(path);
+  const res = await fetch(targetUrl, { ...options, headers });
 
   // Auto-refresh on 401
   if (res.status === 401 && retry && refresh) {
     if (!refreshing) {
-      refreshing = fetch(`${BASE}/auth/refresh`, {
+      refreshing = fetch(buildUrl("/auth/refresh"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken: refresh }),

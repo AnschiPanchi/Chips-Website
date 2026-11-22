@@ -100,23 +100,31 @@ app.use(async (_req, _res, next) => {
   }
 });
 
+// Normalize double slashes in URL to prevent Vercel 308 preflight redirects
+app.use((req, _res, next) => {
+  if (req.url.includes("//")) {
+    req.url = req.url.replace(/\/+/g, "/");
+  }
+  next();
+});
+
 // ── Rate limiting ───────────────────────────────────────────
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 300 });
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: "Too many auth attempts." });
 app.use("/api", limiter);
 app.use("/api/auth", authLimiter);
 
-// ── Routes ──────────────────────────────────────────────────
-app.use("/api/auth",     authRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/orders",   orderRoutes);
-app.use("/api/payments", paymentRoutes);
-app.use("/api/coupons",    couponRoutes);
-app.use("/api/admin",      adminRoutes);
-app.use("/api/newsletter", newsletterRoutes);
+// ── Routes (mounted on both /api/* and root /* so any URL works) ──
+app.use(["/api/auth", "/auth"],             authRoutes);
+app.use(["/api/products", "/products"],     productRoutes);
+app.use(["/api/orders", "/orders"],         orderRoutes);
+app.use(["/api/payments", "/payments"],     paymentRoutes);
+app.use(["/api/coupons", "/coupons"],       couponRoutes);
+app.use(["/api/admin", "/admin"],           adminRoutes);
+app.use(["/api/newsletter", "/newsletter"], newsletterRoutes);
 
 // ── Health ──────────────────────────────────────────────────
-app.get(["/api/health", "/health", "/api"], (_req, res) =>
+app.get(["/api/health", "/health", "/api", "/"], (_req, res) =>
   res.json({ status: "ok", name: "MORO Snacks API", env: process.env.NODE_ENV, time: new Date().toISOString() })
 );
 
