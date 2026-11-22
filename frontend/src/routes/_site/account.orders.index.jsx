@@ -1,10 +1,12 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import StatusBadge from "@/components/account/StatusBadge";
 import { inr, shortDate } from "@/lib/format";
 import { statusLabel } from "@/data/orders";
 import { useAuthStore } from "@/stores/auth";
 import { useAdminStore } from "@/stores/admin";
+import { ordersApi } from "@/api/apiClient";
 
 export const Route = createFileRoute("/_site/account/orders/")({
   head: () => ({ meta: [{ title: "My orders — MORO" }] }),
@@ -13,8 +15,26 @@ export const Route = createFileRoute("/_site/account/orders/")({
 
 function OrdersPage() {
   const user = useAuthStore((s) => s.user);
-  const orders = useAdminStore((s) => s.orders);
-  const mine = orders.filter((o) => o.email === user?.email);
+  const localOrders = useAdminStore((s) => s.orders);
+  const [apiOrders, setApiOrders] = useState([]);
+
+  useEffect(() => {
+    ordersApi.mine()
+      .then((res) => {
+        if (res?.orders) setApiOrders(res.orders);
+      })
+      .catch(() => {});
+  }, [user]);
+
+  // Combine and deduplicate orders by id
+  const combined = [...apiOrders, ...localOrders.filter((o) => o.email === user?.email)];
+  const seen = new Set();
+  const mine = combined.filter((o) => {
+    const key = o.id || o.orderNumber;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 
   return (
     <div>

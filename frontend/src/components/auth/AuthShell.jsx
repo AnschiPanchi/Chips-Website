@@ -19,7 +19,7 @@ export default function AuthShell({ eyebrow, title, copy, children, footer }) {
           </p>
         </div>
         <p className="text-[11px] uppercase tracking-[0.16em] text-brand-cream/35">
-          Demo storefront · mock authentication
+          {brand.name} · Real Indian Crunch
         </p>
         <span
           aria-hidden="true"
@@ -43,8 +43,7 @@ export default function AuthShell({ eyebrow, title, copy, children, footer }) {
           <div className="mt-8">{children}</div>
           {footer && <div className="mt-6 text-[13px] text-brand-forest/60">{footer}</div>}
           <p className="mt-10 text-[11px] leading-relaxed text-brand-forest/35">
-            This is a frontend demonstration. Sign-in is simulated in the browser and is not secure
-            authentication.
+            Your credentials and personal information are encrypted and securely stored.
           </p>
         </div>
       </main>

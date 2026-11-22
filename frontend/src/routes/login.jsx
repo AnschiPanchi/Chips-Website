@@ -1,14 +1,21 @@
-﻿import { useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import AuthShell from "@/components/auth/AuthShell";
 import { useAuthStore } from "@/stores/auth";
+import { authApi } from "@/api/apiClient";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in — MORO" }] }),
+  beforeLoad: () => {
+    if (authApi.hasToken()) {
+      throw redirect({ to: "/" });
+    }
+  },
   component: LoginPage,
 });
 
@@ -31,11 +38,24 @@ function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema), defaultValues: { email: "", password: "" } });
 
-  const onSubmit = (values) => {
-    setTimeout(() => {
-      login({ email: values.email });
-      navigate({ to: "/account" });
-    }, 650);
+  const onSubmit = async (values) => {
+    try {
+      const user = await login({ email: values.email, password: values.password });
+      toast.success("Welcome back!");
+      if (user?.role === "admin") {
+        navigate({ to: "/admin" });
+      } else {
+        const searchParams = new URLSearchParams(window.location.search);
+        const redirectUrl = searchParams.get("redirect");
+        if (redirectUrl && !redirectUrl.includes("/admin")) {
+          window.location.href = redirectUrl;
+        } else {
+          navigate({ to: "/" });
+        }
+      }
+    } catch (err) {
+      toast.error(err.message || "Invalid email or password");
+    }
   };
 
   return (

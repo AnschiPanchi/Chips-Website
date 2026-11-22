@@ -60,7 +60,7 @@ export default function MobileNav({ open, onOpenChange }) {
               onClick={close}
               className="block rounded-lg px-3 py-3 text-[15px] font-medium text-brand-forest transition-colors hover:bg-brand-forest/6"
             >
-              {user ? `Hi, ${user.name.split(" ")[0]}` : "Sign in"}
+              {user ? `Hi, ${user.name.split(" ")[0]}` : "My Account"}
             </Link>
           </div>
 

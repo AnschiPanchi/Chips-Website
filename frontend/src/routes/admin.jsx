@@ -1,9 +1,20 @@
-﻿import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import { useMounted } from "@/hooks/useMounted";
+import { useAuthStore } from "@/stores/auth";
+import { authApi } from "@/api/apiClient";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin console — MORO" }] }),
+  beforeLoad: () => {
+    const user = useAuthStore.getState().user;
+    const hasToken = authApi.hasToken();
+    if (!hasToken || !user || user.role !== "admin") {
+      throw redirect({
+        to: "/login",
+      });
+    }
+  },
   component: AdminLayout,
 });
 

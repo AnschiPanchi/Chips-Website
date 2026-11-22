@@ -1,6 +1,7 @@
-﻿import { create } from "zustand";
+// Updated cart store — validates coupons against real API
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { coupons } from "@/data/coupons";
+import { couponsApi } from "@/api/apiClient";
 import { inr } from "@/lib/format";
 
 const lineKey = (productId, weight) => `${productId}__${weight}`;
@@ -35,9 +36,7 @@ export const useCartStore = create(
         set({ items, isOpen: true });
       },
 
-      remove(key) {
-        set({ items: get().items.filter((item) => item.key !== key) });
-      },
+      remove(key) { set({ items: get().items.filter((item) => item.key !== key) }); },
 
       setQty(key, qty) {
         set({
@@ -47,38 +46,23 @@ export const useCartStore = create(
         });
       },
 
-      clear() {
-        set({ items: [], coupon: null });
-      },
+      clear() { set({ items: [], coupon: null }); },
 
-      applyCoupon(code) {
-        const coupon = coupons.find(
-          (c) => c.code === String(code || "").trim().toUpperCase() && c.active
-        );
-        if (!coupon) return { ok: false, message: "That code isn't valid right now." };
+      async applyCoupon(code) {
         const subtotal = get().subtotal();
-        if (coupon.minOrder && subtotal < coupon.minOrder) {
-          return { ok: false, message: `Add ${inr(coupon.minOrder - subtotal)} more to use ${coupon.code}.` };
+        try {
+          const { coupon } = await couponsApi.validate(code, subtotal);
+          set({ coupon });
+          return { ok: true, message: `${coupon.code} applied — ${coupon.description}` };
+        } catch (err) {
+          return { ok: false, message: err.message || "Invalid coupon." };
         }
-        set({ coupon });
-        return { ok: true, message: `${coupon.code} applied.` };
       },
 
-      removeCoupon() {
-        set({ coupon: null });
-      },
-
-      setOpen(isOpen) {
-        set({ isOpen });
-      },
-
-      subtotal() {
-        return get().items.reduce((sum, item) => sum + item.price * item.qty, 0);
-      },
-
-      count() {
-        return get().items.reduce((sum, item) => sum + item.qty, 0);
-      },
+      removeCoupon() { set({ coupon: null }); },
+      setOpen(isOpen) { set({ isOpen }); },
+      subtotal() { return get().items.reduce((sum, item) => sum + item.price * item.qty, 0); },
+      count() { return get().items.reduce((sum, item) => sum + item.qty, 0); },
     }),
     {
       name: "moro-cart",

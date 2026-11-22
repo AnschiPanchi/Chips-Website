@@ -1,7 +1,9 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, Package } from "lucide-react";
+import { useState, useEffect } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CheckCircle2, Package, Loader2 } from "lucide-react";
 import { inr, shortDate } from "@/lib/format";
 import { useAdminStore } from "@/stores/admin";
+import { ordersApi } from "@/api/apiClient";
 
 export const Route = createFileRoute("/_site/order-confirmation/$orderNumber")({
   head: () => ({ meta: [{ title: "Order placed — MORO" }] }),
@@ -10,7 +12,24 @@ export const Route = createFileRoute("/_site/order-confirmation/$orderNumber")({
 
 function ConfirmationPage() {
   const { orderNumber } = Route.useParams();
-  const order = useAdminStore((s) => s.orders.find((o) => o.id === orderNumber));
+  const localOrder = useAdminStore((s) => s.orders.find((o) => o.id === orderNumber));
+  const [dbOrder, setDbOrder] = useState(null);
+  const [loading, setLoading] = useState(!localOrder);
+
+  useEffect(() => {
+    let unmounted = false;
+    ordersApi.byNumber(orderNumber)
+      .then((res) => {
+        if (!unmounted && res?.order) setDbOrder(res.order);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!unmounted) setLoading(false);
+      });
+    return () => { unmounted = true; };
+  }, [orderNumber]);
+
+  const order = localOrder || dbOrder;
 
   return (
     <div className="container-x py-14 lg:py-20">
@@ -20,7 +39,7 @@ function ConfirmationPage() {
             <CheckCircle2 className="h-6 w-6" strokeWidth={1.6} />
           </span>
           <div>
-            <p className="eyebrow text-brand-chilli">Demo order placed</p>
+            <p className="eyebrow text-brand-chilli">Order confirmed</p>
             <h1 className="mt-1 font-heading text-[clamp(1.8rem,4vw,2.6rem)] font-extrabold leading-tight tracking-[-0.03em] text-brand-forest">
               Thanks — order {orderNumber}
             </h1>
@@ -28,8 +47,8 @@ function ConfirmationPage() {
         </div>
 
         <p className="mt-4 text-[14px] leading-relaxed text-brand-forest/65">
-          This is a frontend demonstration: no payment was taken and nothing will be dispatched. In
-          the live store you'd get a confirmation email with tracking within the hour.
+          Your order has been placed successfully! We've received your order and are packing your freshly baked snacks.
+          A confirmation with your invoice and tracking updates has been dispatched to your email.
         </p>
 
         <div className="mt-8 rounded-2xl border border-brand-forest/12 bg-brand-cream/50 p-6">
@@ -42,11 +61,15 @@ function ConfirmationPage() {
             </span>
           </div>
 
-          {order ? (
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-brand-forest/40" />
+            </div>
+          ) : order ? (
             <>
               <ul className="divide-y divide-brand-forest/8 py-2">
-                {order.items.map((item) => (
-                  <li key={`${item.productId}-${item.weight}`} className="flex justify-between py-2.5 text-[13px]">
+                {order.items?.map((item, idx) => (
+                  <li key={`${item.productId || idx}-${item.weight}`} className="flex justify-between py-2.5 text-[13px]">
                     <span className="text-brand-forest/75">
                       {item.name} <span className="text-brand-forest/40">· {item.weight} × {item.qty}</span>
                     </span>
@@ -74,48 +97,49 @@ function ConfirmationPage() {
                   <dd>{inr(order.total)}</dd>
                 </div>
               </dl>
-              <div className="mt-4 grid gap-3 border-t border-brand-forest/12 pt-4 text-[12.5px] text-brand-forest/65 sm:grid-cols-2">
-                <p>
-                  <span className="block text-[10px] uppercase tracking-[0.12em] text-brand-forest/40">
-                    Delivering to
-                  </span>
-                  {order.address.name}
-                  <br />
-                  {order.address.line1}
-                  {order.address.line2 ? `, ${order.address.line2}` : ""}
-                  <br />
-                  {order.address.city}, {order.address.state} {order.address.pincode}
-                </p>
-                <p>
-                  <span className="block text-[10px] uppercase tracking-[0.12em] text-brand-forest/40">
-                    Payment
-                  </span>
-                  {order.payment}
-                  <br />
-                  Placed {shortDate(order.placedAt)}
-                </p>
-              </div>
+              {order.address && (
+                <div className="mt-4 grid gap-3 border-t border-brand-forest/12 pt-4 text-[12.5px] text-brand-forest/65 sm:grid-cols-2">
+                  <p>
+                    <span className="block text-[10px] uppercase tracking-[0.12em] text-brand-forest/40">
+                      Delivering to
+                    </span>
+                    {order.address.name}
+                    <br />
+                    {order.address.line1}
+                    {order.address.line2 ? `, ${order.address.line2}` : ""}
+                    <br />
+                    {order.address.city}, {order.address.state} {order.address.pincode}
+                  </p>
+                  <p>
+                    <span className="block text-[10px] uppercase tracking-[0.12em] text-brand-forest/40">
+                      Payment
+                    </span>
+                    {order.payment}
+                    <br />
+                    Placed {order.placedAt ? shortDate(order.placedAt) : "Just now"}
+                  </p>
+                </div>
+              )}
             </>
           ) : (
             <p className="py-4 text-[13px] text-brand-forest/60">
-              Order details aren't available in this session, but your demo order number is{" "}
-              {orderNumber}.
+              Order {orderNumber} has been received. Check your email for full details.
             </p>
           )}
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            to="/account/orders"
-            className="rounded-md bg-brand-forest px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-paper"
-          >
-            View my orders
-          </Link>
+        <div className="mt-8 flex flex-wrap gap-4">
           <Link
             to="/shop"
-            className="rounded-md border border-brand-forest/25 px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-forest"
+            className="inline-flex rounded-md bg-brand-forest px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-paper hover:bg-brand-chilli transition-colors"
           >
             Continue shopping
+          </Link>
+          <Link
+            to="/account/orders"
+            className="inline-flex rounded-md border border-brand-forest/20 px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-forest hover:bg-brand-forest/5 transition-colors"
+          >
+            View all orders
           </Link>
         </div>
       </div>

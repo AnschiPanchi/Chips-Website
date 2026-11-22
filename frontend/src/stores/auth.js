@@ -1,58 +1,67 @@
-﻿import { create } from "zustand";
+// Updated auth store — wired to real API
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { demoAddress } from "@/data/customers";
-
-// Mock session only — this is a frontend demo, not real authentication.
-const demoUser = {
-  id: "cust-1",
-  name: "Aanya Kapoor",
-  email: "aanya.kapoor@example.com",
-  phone: "+91 98200 41123",
-  role: "customer",
-  addresses: [demoAddress],
-  isDemo: true,
-};
+import { authApi } from "@/api/apiClient";
 
 export const useAuthStore = create(
   persist(
     (set, get) => ({
-      user: demoUser,
-      login({ email }) {
-        set({ user: { ...demoUser, email, isDemo: false } });
+      user: null,
+
+      async login({ email, password }) {
+        const data = await authApi.login({ email, password });
+        set({ user: data.user });
+        return data.user;
       },
-      register({ name, email, phone }) {
-        set({ user: { ...demoUser, name, email, phone, isDemo: false } });
+
+      async register({ name, email, password, phone }) {
+        const data = await authApi.register({ name, email, password, phone });
+        set({ user: data.user });
+        return data.user;
       },
-      logout() {
+
+      async logout() {
+        try {
+          await authApi.logout();
+        } catch (_err) {
+          // Ignore network errors on logout
+        }
         set({ user: null });
       },
-      updateProfile(patch) {
-        set({ user: { ...get().user, ...patch } });
+
+      async updateProfile(patch) {
+        const data = await authApi.updateProfile(patch);
+        set({ user: data.user });
+        return data.user;
       },
-      addAddress(address) {
+
+      async addAddress(address) {
+        const data = await authApi.addAddress(address);
         const user = get().user;
-        set({
-          user: {
-            ...user,
-            addresses: [...(user.addresses || []), { ...address, id: `addr-${Date.now()}` }],
-          },
-        });
+        set({ user: { ...user, addresses: data.addresses } });
+        return data.addresses;
       },
-      updateAddress(id, patch) {
+
+      async updateAddress(id, patch) {
+        const data = await authApi.updateAddress(id, patch);
         const user = get().user;
-        set({
-          user: {
-            ...user,
-            addresses: (user.addresses || []).map((a) => (a.id === id ? { ...a, ...patch } : a)),
-          },
-        });
+        set({ user: { ...user, addresses: data.addresses } });
+        return data.addresses;
       },
-      removeAddress(id) {
+
+      async removeAddress(id) {
+        const data = await authApi.deleteAddress(id);
         const user = get().user;
-        set({ user: { ...user, addresses: (user.addresses || []).filter((a) => a.id !== id) } });
+        set({ user: { ...user, addresses: data.addresses } });
+        return data.addresses;
       },
+
+      setUser(user) { set({ user }); },
     }),
-    { name: "moro-auth" }
+    {
+      name: "moro-auth",
+      partialize: (state) => ({ user: state.user }),
+    }
   )
 );
 

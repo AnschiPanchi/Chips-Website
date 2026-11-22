@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 import { useAuthStore } from "@/stores/auth";
 
@@ -12,7 +12,13 @@ const links = [
 
 export default function AccountNav() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const logout = useAuthStore((s) => s.logout);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate({ to: "/login" });
+  };
 
   return (
     <nav aria-label="Account" className="flex flex-col gap-1">
@@ -34,7 +40,7 @@ export default function AccountNav() {
       })}
       <button
         type="button"
-        onClick={logout}
+        onClick={handleLogout}
         className="mt-2 flex items-center gap-2 rounded-lg px-3.5 py-2.5 text-[13px] font-medium text-brand-forest/50 transition-colors hover:bg-brand-chilli/8 hover:text-brand-chilli"
       >
         <LogOut className="h-3.5 w-3.5" /> Sign out

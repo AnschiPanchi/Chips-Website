@@ -1,14 +1,21 @@
-﻿import { useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import AuthShell from "@/components/auth/AuthShell";
 import { useAuthStore } from "@/stores/auth";
+import { authApi } from "@/api/apiClient";
 
 export const Route = createFileRoute("/register")({
   head: () => ({ meta: [{ title: "Create an account — MORO" }] }),
+  beforeLoad: () => {
+    if (authApi.hasToken()) {
+      throw redirect({ to: "/" });
+    }
+  },
   component: RegisterPage,
 });
 
@@ -40,11 +47,19 @@ function RegisterPage() {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = (values) => {
-    setTimeout(() => {
-      registerUser({ name: values.name, email: values.email, phone: values.phone });
-      navigate({ to: "/account" });
-    }, 700);
+  const onSubmit = async (values) => {
+    try {
+      await registerUser({
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        password: values.password,
+      });
+      toast.success("Account created! Welcome to MORO.");
+      navigate({ to: "/shop" });
+    } catch (err) {
+      toast.error(err.message || "Failed to create account");
+    }
   };
 
   return (

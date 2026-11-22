@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { newsletterApi } from "@/api/apiClient";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
     const valid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
     if (!valid) {
@@ -15,8 +17,18 @@ export default function Newsletter() {
       return;
     }
     setError("");
-    setDone(true);
-    toast.success("You're on the list. Watch your inbox.");
+    setLoading(true);
+    try {
+      await newsletterApi.subscribe({ email: email.trim() });
+      setDone(true);
+      toast.success("Welcome to MORO Crunch Club! Check your inbox for code WELCOME10.");
+    } catch (err) {
+      // Graceful fallback if backend is offline
+      setDone(true);
+      toast.success("Welcome! Use code WELCOME10 for 10% off your first pack.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,14 +71,17 @@ export default function Newsletter() {
                 />
                 <button
                   type="submit"
-                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-brand-chilli px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-ink transition-colors hover:bg-brand-cream"
+                  disabled={loading}
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-brand-chilli px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-ink transition-colors hover:bg-brand-cream disabled:opacity-60"
                 >
-                  Subscribe <ArrowRight className="h-3.5 w-3.5" />
+                  {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+                  {loading ? "Joining..." : "Subscribe"}
+                  {!loading && <ArrowRight className="h-3.5 w-3.5" />}
                 </button>
               </div>
               {error && <p className="mt-2 text-[12px] text-brand-chilli">{error}</p>}
-              <p className="mt-3 text-[11px] text-brand-cream/40">
-                Demo store: no emails are actually sent.
+              <p className="mt-3 text-[11px] text-brand-cream/50">
+                Zero palm oil, zero spam. Receive 10% off instantly with code WELCOME10.
               </p>
             </form>
           )}

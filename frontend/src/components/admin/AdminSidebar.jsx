@@ -3,6 +3,7 @@ import {
   BarChart3,
   Boxes,
   LayoutGrid,
+  Megaphone,
   Package,
   Percent,
   Settings,
@@ -17,6 +18,7 @@ const nav = [
   { label: "Products", to: "/admin/products", icon: Package },
   { label: "Categories", to: "/admin/categories", icon: LayoutGrid },
   { label: "Orders", to: "/admin/orders", icon: ShoppingCart },
+  { label: "Campaigns & WhatsApp", to: "/admin/campaigns", icon: Megaphone },
   { label: "Customers", to: "/admin/customers", icon: Users },
   { label: "Inventory", to: "/admin/inventory", icon: Boxes },
   { label: "Coupons", to: "/admin/coupons", icon: Percent },
@@ -63,8 +65,8 @@ export default function AdminSidebar({ onNavigate }) {
         <Link to="/" className="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-cream/50 hover:text-brand-chilli">
           View storefront
         </Link>
-        <p className="mt-3 text-[10px] leading-relaxed text-brand-cream/30">
-          Demo admin — data lives in this browser only.
+        <p className="mt-3 text-[10px] leading-relaxed text-brand-cream/40">
+          MORO Admin Console · Big Flavour, Zero Palm Oil
         </p>
       </div>
     </div>

@@ -1,10 +1,12 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { useState, useEffect } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import OrderTimeline from "@/components/account/OrderTimeline";
 import StatusBadge from "@/components/account/StatusBadge";
 import { inr, shortDate } from "@/lib/format";
 import { statusLabel } from "@/data/orders";
 import { useAdminStore } from "@/stores/admin";
+import { ordersApi } from "@/api/apiClient";
 
 export const Route = createFileRoute("/_site/account/orders/$orderId")({
   head: () => ({ meta: [{ title: "Order details — MORO" }] }),
@@ -13,7 +15,28 @@ export const Route = createFileRoute("/_site/account/orders/$orderId")({
 
 function OrderDetailPage() {
   const { orderId } = Route.useParams();
-  const order = useAdminStore((s) => s.orders.find((o) => o.id === orderId));
+  const localOrder = useAdminStore((s) => s.orders.find((o) => o.id === orderId));
+  const [apiOrder, setApiOrder] = useState(null);
+  const [loading, setLoading] = useState(!localOrder);
+
+  useEffect(() => {
+    if (!localOrder) {
+      ordersApi.byNumber(orderId)
+        .then((res) => { if (res?.order) setApiOrder(res.order); })
+        .catch(() => {})
+        .finally(() => setLoading(false));
+    }
+  }, [orderId, localOrder]);
+
+  const order = localOrder || apiOrder;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-6 w-6 animate-spin text-brand-forest/40" />
+      </div>
+    );
+  }
 
   if (!order) {
     return (

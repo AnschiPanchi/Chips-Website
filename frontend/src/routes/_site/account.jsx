@@ -54,11 +54,6 @@ function AccountLayout() {
           Hi, {user.name.split(" ")[0]}
         </h1>
         <p className="mt-1 text-[13px] text-brand-forest/55">{user.email}</p>
-        {user.isDemo && (
-          <p className="mt-3 inline-flex rounded-full bg-brand-cream px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-forest/60">
-            Demo session · mock authentication
-          </p>
-        )}
       </header>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[210px_1fr] lg:gap-14">
